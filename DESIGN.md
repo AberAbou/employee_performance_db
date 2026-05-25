@@ -41,7 +41,7 @@ In this section you should answer the following questions:
 
 ### Relationships
 
-![System Entity Relationship Diagram](https://yourdomain.com/images/erd_schema.png)
+![Employee Performance Entity Relationship Diagram](./assets/employee_performance-ERD.jpg)
 
 ## Optimizations
 
