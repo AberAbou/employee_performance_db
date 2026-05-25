@@ -230,9 +230,6 @@ GROUP BY ap.`id`, d.`department_name`, p.`id`, pr.`completion_status`, pr.`outco
 
 DELIMITER //
 
--- Unified Dashboard System Access Procedure
-DELIMITER //
-
 -- Unified Dashboard System Access Router
 CREATE PROCEDURE `GetEmployeeDashboard`(
     IN `p_username` VARCHAR(50),
