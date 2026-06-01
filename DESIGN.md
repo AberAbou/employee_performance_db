@@ -113,6 +113,14 @@ contribution_score: A fixed-point decimal derived and calculated by project diff
 
 ![Employee Performance Entity Relationship Diagram](assets/employee_performance-ERD.jpg)
 
+1. Department - Employee (belongs to) Relationship: One-to-Many (1:N). A Department can house multiple employees, but an individual Employee belongs to exactly one department.
+2. Employee - Employee (manages / Self-Referencing)One-to-Many (1:N) recursive relationship. A manager is also an Employee. An employee can report to at most one manager (via manager_id), while a single manager can oversee multiple employees.
+3. Employee - Project (Project_Assignment) Relationship: Many-to-Many (M:N) resolved via Project_Assignment bridge entity. An Employee can be assigned to multiple projects, and a Project can have multiple employees assigned to it. This relationship is captured by the Project_Assignment intersection entity.
+4. Employee / Project / Appraisal_Period - Performance_Record Relationship: Multi-way relationship captured via individual foreign keys. A Performance_Record serves as a specific transactional evaluation log. It links an Employee (evaluated by), a Project (appraises), and an Appraisal_Period (appraised in). An employee can have multiple performance records across different projects and periods. A project can accumulate multiple performance records over time. An appraisal period contains multiple performance records for various employees and initiatives.
+5. Performance_Record - Project_Assignment (evaluates)Relationship: One-to-Many (1:N). A physical Performance_Record acts as the formal assessment tool that evaluates the active assignments captured inside the Project_Assignment bridge.
+6. Project - Appraisal_Period (evaluated in) Relationship: Many-to-Many (M:N). A Project can be actively reviewed across multiple chronological Appraisal_Periods, and a single Appraisal_Period will simultaneously track and evaluate multiple ongoing projects.
+7. Contribution - Employee, Project, & Project_Assignment Relationship: The target ledger tracking points. The Contribution entity acts as the final landing target for calculated metrics. It tracks how a specific staff member belongs to a data stream, receives its credit from his/her specific Project's effort, so, it maps closely to a staff member who is assigned to a task.
+
 ### Triggers
 #### 1. before_performance_insert_pipeline:
 - Security Validation: Automatically checks the state of the target appraisal period before allowing new records.
