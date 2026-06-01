@@ -150,14 +150,9 @@ This section is organized to detail three presentation views connect to the empl
 ### View 1: vw_individual_project_scores
 This view acts as a detailed, line-by-line master ledger for individual performance entries. It combines employee details with project attributes, displays the exact scores calculated by your automated data pipelines, and dynamically computes the maximum score baseline possible based on project difficulty.
 
-Example:
-select * from vw_individual_project_scores limit 2;
-+---------------------+-------------+----------+------------+---------------+---------------+----------------------------+---------------+------------+-----------------------+----------------+--------------------------+--------------------------------+---------------------------------------------------------------------+
-| appraisal_period_id | period_name | username | manager_id | department_id | employee_name | project_name               | assigned_role | difficulty | completion_status     | outcome_status | individual_project_score | maximum_possible_project_score | manager_review_notes                                                |
-+---------------------+-------------+----------+------------+---------------+---------------+----------------------------+---------------+------------+-----------------------+----------------+--------------------------+--------------------------------+---------------------------------------------------------------------+
-|                   1 | 2025_H1     | asmith   |          1 |             1 | Alice Smith   | Next-Gen Infusion Pump V&V | Sr. QAE       | High       | InProgress_OnSchedule | N/A            |                   135.00 |                         270.00 | Historical Record H1: Alice tracking on baseline protocols.         |
-|                   2 | 2025_H2     | asmith   |          1 |             1 | Alice Smith   | Next-Gen Infusion Pump V&V | Sr. QAE       | High       | InProgress_Overdue    | N/A            |                    54.00 |                         270.00 | Historical Record H2: Slower traction due to documentation backlog. |
-+---------------------+-------------+----------+------------+---------------+---------------+----------------------------+---------------+------------+-----------------------+----------------+--------------------------+--------------------------------+---------------------------------------------------------------------+
+Sample demo view data on selected fields:
+![vw_individual_project_scores view sample data](assets/vw_individual_project_scores_sampleData.png)
+
 ### Indexes
 
 #### INDEX `idx_emp_credential` ON `employees` (`username`, `password`, `role`); 
