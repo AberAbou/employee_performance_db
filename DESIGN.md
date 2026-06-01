@@ -111,7 +111,7 @@ contribution_score: A fixed-point decimal derived and calculated by project diff
 
 ### Relationships
 
-![Employee Performance Entity Relationship Diagram](assets/employee_performance-ERD.jpg)
+![Employee Performance Entity Relationship Diagram](assets/employee_performance-ERD2.jpg)
 
 1. Department - Employee (belongs to) Relationship: One-to-Many (1:N). A Department can house multiple employees, but an individual Employee belongs to exactly one department.
 2. Employee - Employee (manages / Self-Referencing)One-to-Many (1:N) recursive relationship. A manager is also an Employee. An employee can report to at most one manager (via manager_id), while a single manager can oversee multiple employees.
