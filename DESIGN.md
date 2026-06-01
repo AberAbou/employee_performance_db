@@ -153,7 +153,7 @@ This view acts as a detailed, line-by-line master ledger for individual performa
 Sample demo view data on selected fields:
 ![vw_individual_project_scores view sample data](assets/vw_individual_project_scores_sampleData.png)
 
-#### Stored Procedure `GetEmployeeDashboard`(`p_username`, `p_password`,`p_appraisal_period_id`)
+#### RELATED VIEW Stored Procedure `GetEmployeeDashboard`(`p_username`, `p_password`,`p_appraisal_period_id`)
 
 1.  GetEmployeeDashboard (Employee Mode): When an individual worker logs in (such as Alice calling CALL GetEmployeeDashboard('asmith', 'alice2026', 3);), the procedure uses vw_individual_project_scores view to pull only the specific rows matching their credentials for the selected appraisal period.
 Sample GetEmployeeDashboard CALL for 'EMPLOYEE' role (CALL GetEmployeeDashboard('asmith', 'alice2026', 3);):
@@ -169,18 +169,12 @@ Sample GetEmployeeDashboard CALL for 'HR' role (CALL GetEmployeeDashboard('sjenk
 
 
 
-### Indexes
+#### Underlying Supporting Indexes
+Index A: idx_emp_credential: CREATE INDEX `idx_emp_credential` ON `employees` (`username`, `password`, `role`);
+That is a Non-Clustered / Non-Unique Index utilizing index seek. This index builds a standalone, secondary B-Tree structure entirely separate from the main table rows. When the procedure checks login credentials, the database engine executes an Index Seek, zooming straight down the tree branches directly to the matching user record without wasting time reading the entire table. Because your login query asks for the user's role, and that exact column is physically saved inside this index's leaf nodes, it acts as a Covering Index. The engine pulls all the required information straight out of the index itself and never touches the main table pages, preventing any extra disk lookups. So, no key lookup involved in on cluster index primary key B-TREE.
 
-#### INDEX `idx_emp_credential` ON `employees` (`username`, `password`, `role`); 
-This index (non-clustered onn-unique index) creates a completely separate secondary B-Tree structure sitting on top of the primary 'employees' table data indexed by the clustered index (The 'employees' table primary key 'id'). This index allows us to perform non-clustered index seek.
+Index B: idx_perf_transaction_lookup: CREATE INDEX `idx_perf_transaction_lookup` ON `performance_records` (`appraisal_period_id`, `employee_id`, `project_id`);
+That is a Non-Clustered / Non-Unique Index utilizing index seek followed by a key lookup for non presented additional query data. This composite index creates a separate secondary B-Tree organized left-to-right starting with appraisal_period_id. When filtering by a target time range (like period 3), the database runs the Index Seek to reach that quarter's data blocks, completely bypassing old history data. However, because this view displays query data which do not live inside this secondary index. The query execution plan performs a Key Lookup to extract the remaining query data.
 
-### VIEWS
-#### vw_individual_project_scores
-Consolidates information from five different tables to summarize data 
 ## Limitations
-
-In this section you should answer the following questions:
-
-* What are the limitations of your design?
-It do
-* What might your database not be able to represent very well?
+Refer to the Out of Scope sections of this document.
