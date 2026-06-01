@@ -115,7 +115,6 @@ SELECT
     ap.`id` AS `appraisal_period_id`,
     ap.`period_name`,
     e.`username`,
-    e.`password`,
     e.`manager_id`, 
     e.`department_id`, 
     CONCAT(e.`first_name`, ' ', e.`last_name`) AS `employee_name`,
@@ -207,7 +206,7 @@ BEGIN
         -- Regular Employees only pull their matching credentials line
         SELECT `period_name`, `project_name`, `assigned_role`, `difficulty`, `completion_status`, `outcome_status`, `individual_project_score`, `maximum_possible_project_score`, `manager_review_notes`
         FROM `vw_individual_project_scores`
-        WHERE `username` = `p_username` AND `password` = `p_password` AND `appraisal_period_id` = `p_appraisal_period_id`;
+        WHERE `username` = `p_username` AND `appraisal_period_id` = `p_appraisal_period_id`;
 
     ELSEIF `v_user_role` = 'Manager' THEN
         -- Satisfies Requirement #2: Show all individual itemized rows for their department with names
