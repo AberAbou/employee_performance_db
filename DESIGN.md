@@ -174,7 +174,7 @@ Sample GetEmployeeDashboard CALL for 'HR' role (CALL GetEmployeeDashboard('sjenk
 
 #### Underlying Supporting Indexes
 Index A: idx_emp_credential: CREATE INDEX `idx_emp_credential` ON `employees` (`username`, `password`, `role`);
-That is a Non-Clustered / Non-Unique Index utilizing index seek. This index builds a standalone, secondary B-Tree structure entirely separate from the main table rows. When the procedure checks login credentials, the database engine executes an Index Seek, zooming straight down the tree branches directly to the matching user record without wasting time reading the entire table. Because your login query asks for the user's role, and that exact column is physically saved inside this index's leaf nodes, it acts as a Covering Index. The engine pulls all the required information straight out of the index itself and never touches the main table pages, preventing any extra disk lookups. So, no key lookup involved in on cluster index primary key B-TREE.
+This is a Non-Clustered / Non-Unique Index utilizing index seek. This index builds a standalone, secondary B-Tree structure entirely separate from the main table rows. When the procedure checks login credentials, the database engine executes an Index Seek, zooming straight down the tree branches directly to the matching user record without wasting time reading the entire table. Because your login query asks for the user's role, and that exact column is physically saved inside this index's leaf nodes, it acts as a Covering Index. The engine pulls all the required information straight out of the index itself and never touches the main table pages, preventing any extra disk lookups. So, no key lookup involved in on cluster index primary key B-TREE.
 
 Index B: idx_perf_transaction_lookup: CREATE INDEX `idx_perf_transaction_lookup` ON `performance_records` (`appraisal_period_id`, `employee_id`, `project_id`);
 That is a Non-Clustered / Non-Unique Index utilizing index seek followed by a key lookup for non presented additional query data. This composite index creates a separate secondary B-Tree organized left-to-right starting with appraisal_period_id. When filtering by a target time range (like period 3), the database runs the Index Seek to reach that quarter's data blocks, completely bypassing old history data. However, because this view displays query data which do not live inside this secondary index. The query execution plan performs a Key Lookup to extract the remaining query data.
@@ -202,6 +202,14 @@ Sample GetSecuredCorporateDashboard CALL for 'HR' role (CALL GetSecuredCorporate
 ![Sample GetSecuredCorporateDashboard 'HEALTH' CALL - HR](assets/Sample_GetSecuredCorporateDashboard_CALL_HR.png)
 
 #### Underlying Supporting Indexes
+CREATE INDEX `idx_assignment_lookup` ON `project_assignments` (`project_id`, `employee_id`);
+This is Non-Clustered / Non-Unique Index execution of the database engine is Conditional Index Seek (by Project) OR Full Index Scan (by Employee). This index creates a secondary B-Tree structured specifically from left to right. Because project_id is the leftmost column, any query searching or joining from the project's perspective ("Which employees are on Project X?") triggers a high-speed Index Seek straight to the target leaf node. However, because this is a composite index, it follows the Leftmost Prefix Rule. If your query attempts to search or filter using only the second column (employee_id), the structural sorting breaks down. The database engine cannot perform a seek; instead, it is forced to do a Full Index Scan, reading through the entire secondary index tree from left to right to piece the relationship map together.
+
+### View 3: vw_final_cycle_appraisal
+This view handles top-line executive rollups. It takes the individual, itemized scores from your first view, sums up both the earned and total possible scores, and calculates an absolute productivity efficiency score (execution_efficiency_pct) alongside a count of active simultaneous projects for each employee.
+
+Sample demo view data with row-limit:
+![vw_final_cycle_appraisal view sample data](assets/vw_final_cycle_appraisal_sampleData.png)
 
 
 ## Limitations
