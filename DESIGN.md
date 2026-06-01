@@ -157,18 +157,17 @@ Sample demo view data on selected fields:
 
 1.  GetEmployeeDashboard (Employee Mode): When an individual worker logs in (such as Alice calling CALL GetEmployeeDashboard('asmith', 'alice2026', 3);), the procedure uses vw_individual_project_scores view to pull only the specific rows matching their credentials for the selected appraisal period.
 Sample GetEmployeeDashboard CALL for 'EMPLOYEE' role (CALL GetEmployeeDashboard('asmith', 'alice2026', 3);):
-![Sample GetEmployeeDashboard CALL - EMPLOYEE](assets/Sample GetEmployeeDashboard CALL - EMPLOYEE.png)
+![]()
+![Sample GetEmployeeDashboard CALL - EMPLOYEE](assets/Sample_GetEmployeeDashboard_CALL_EMPLOYEE.png)
+
 2.  GetEmployeeDashboard (Manager Mode): for v_user_role 'Manager', it pulls data from vw_individual_project_scores view in order to only show the individual manager his own /her own employees' performance details during the target performance cycle (For assessment of the employees working in his department)
 Sample GetEmployeeDashboard CALL for 'Manager' role (CALL GetEmployeeDashboard('jdoe', 'john2026', 3);):
-![Sample GetEmployeeDashboard CALL - MANAGER](assets/Sample GetEmployeeDashboard CALL - MANAGER.png)
+![Sample GetEmployeeDashboard CALL - MANAGER](assets/Sample_GetEmployeeDashboard_CALL_MANAGER.png)
 3.  GetEmployeeDashboard (HR Mode): for v_user_role 'HR' pulls data from vw_final_cycle_appraisal view in order to show all employees' performance details during the target performance cycle (For global/corporate wide employees' assessment)
 Sample GetEmployeeDashboard CALL for 'HR' role (CALL GetEmployeeDashboard('sjenkins', 'pass123', 3);):
-![Sample GetEmployeeDashboard CALL - HR](assets/Sample GetEmployeeDashboard CALL - HR.png)
+![Sample GetEmployeeDashboard CALL - HR](assets/Sample_GetEmployeeDashboard_CALL_HR.png)
 
 
-
-
-GetEmployeeDashboard (Manager / HR Mode): When a manager (like John Doe calling CALL GetEmployeeDashboard('jdoe', 'john2026', 3);) or an HR team member logs in, the procedure reads from this view to present full itemized tracking lists grouped by department or enterprise boundaries.
 
 ### Indexes
 
