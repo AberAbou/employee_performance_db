@@ -150,21 +150,24 @@ This section is organized to detail three presentation views connect to the empl
 ### View 1: vw_individual_project_scores
 This view acts as a detailed, line-by-line master ledger for individual performance entries. It combines employee details with project attributes, displays the exact scores calculated by your automated data pipelines, and dynamically computes the maximum score baseline possible based on project difficulty.
 
-Sample demo view data on selected fields:
+Sample demo view data on selected fields and row-limit:
 ![vw_individual_project_scores view sample data](assets/vw_individual_project_scores_sampleData.png)
 
 #### RELATED VIEW Stored Procedure `GetEmployeeDashboard`(`p_username`, `p_password`,`p_appraisal_period_id`)
 
 1.  GetEmployeeDashboard (Employee Mode): When an individual worker logs in (such as Alice calling CALL GetEmployeeDashboard('asmith', 'alice2026', 3);), the procedure uses vw_individual_project_scores view to pull only the specific rows matching their credentials for the selected appraisal period.
 Sample GetEmployeeDashboard CALL for 'EMPLOYEE' role (CALL GetEmployeeDashboard('asmith', 'alice2026', 3);):
-![]()
+
 ![Sample GetEmployeeDashboard CALL - EMPLOYEE](assets/Sample_GetEmployeeDashboard_CALL_EMPLOYEE.png)
 
 2.  GetEmployeeDashboard (Manager Mode): for v_user_role 'Manager', it pulls data from vw_individual_project_scores view in order to only show the individual manager his own /her own employees' performance details during the target performance cycle (For assessment of the employees working in his department)
 Sample GetEmployeeDashboard CALL for 'Manager' role (CALL GetEmployeeDashboard('jdoe', 'john2026', 3);):
+
 ![Sample GetEmployeeDashboard CALL - MANAGER](assets/Sample_GetEmployeeDashboard_CALL_MANAGER.png)
+
 3.  GetEmployeeDashboard (HR Mode): for v_user_role 'HR' pulls data from vw_final_cycle_appraisal view in order to show all employees' performance details during the target performance cycle (For global/corporate wide employees' assessment)
 Sample GetEmployeeDashboard CALL for 'HR' role (CALL GetEmployeeDashboard('sjenkins', 'pass123', 3);):
+
 ![Sample GetEmployeeDashboard CALL - HR](assets/Sample_GetEmployeeDashboard_CALL_HR.png)
 
 
@@ -175,6 +178,31 @@ That is a Non-Clustered / Non-Unique Index utilizing index seek. This index buil
 
 Index B: idx_perf_transaction_lookup: CREATE INDEX `idx_perf_transaction_lookup` ON `performance_records` (`appraisal_period_id`, `employee_id`, `project_id`);
 That is a Non-Clustered / Non-Unique Index utilizing index seek followed by a key lookup for non presented additional query data. This composite index creates a separate secondary B-Tree organized left-to-right starting with appraisal_period_id. When filtering by a target time range (like period 3), the database runs the Index Seek to reach that quarter's data blocks, completely bypassing old history data. However, because this view displays query data which do not live inside this secondary index. The query execution plan performs a Key Lookup to extract the remaining query data.
+
+### View 2: vw_department_project_execution
+This view serves as an operational health radar for project portfolios appraisal periods (projects' performance within appraisal periods). It groups records by department and project name to compute team performance averages (team_average_performance_score) and displays the total headcount allocated to each project within displayed appraisal periods.
+
+
+Sample demo view data with row-limit:
+![vw_department_project_execution view sample data](assets/vw_department_project_execution_sampleData.png)
+
+
+#### RELATED VIEW Stored Procedure `GetSecuredCorporateDashboard`(`p_username`,`p_password`,`p_appraisal_period_id`, `p_dashboard_mode`)
+The p_dashboard_mode parameter is a flag to use the appropriate target view. To use the vw_department_project_execution view, the user passes 'HEALTH' value into the 'p_dashboard_mode' parameter. 
+
+1.  GetSecuredCorporateDashboard (Manager Mode) with p_dashboard_mode 'HEALTH' flag: The procedure allows 'MANAGER' role to query the vw_department_project_execution view to measure and assess how his/her specific department's projects are performing within active appraisal periods.
+
+Sample GetSecuredCorporateDashboard CALL for 'MANAGER' role (CALL GetSecuredCorporateDashboard('jdoe', 'john2026', 3, 'HEALTH');):
+
+![Sample GetSecuredCorporateDashboard 'HEALTH' CALL - MANAGER](assets/Sample_GetSecuredCorporateDashboard_CALL_MANAGER.png)
+
+2.  GetSecuredCorporateDashboard (HR Mode) with p_dashboard_mode 'HEALTH' flag: The procedure allows 'HR' rep. role to query the vw_department_project_execution view to get a comprehensive, company-wide portfolio map breaking down completion states, project difficulty tiers, and team averages across all departments.
+
+Sample GetSecuredCorporateDashboard CALL for 'HR' role (CALL GetSecuredCorporateDashboard('sjenkins', 'pass123', 3, 'HEALTH');):
+![Sample GetSecuredCorporateDashboard 'HEALTH' CALL - HR](assets/Sample_GetSecuredCorporateDashboard_CALL_HR.png)
+
+#### Underlying Supporting Indexes
+
 
 ## Limitations
 Refer to the "Out of Scope" sections of this document.
