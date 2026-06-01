@@ -211,6 +211,19 @@ This view handles top-line executive rollups. It takes the individual, itemized 
 Sample demo view data with row-limit:
 ![vw_final_cycle_appraisal view sample data](assets/vw_final_cycle_appraisal_sampleData.png)
 
+#### RELATED VIEW Stored Procedure `GetSecuredCorporateDashboard`(`p_username`,`p_password`,`p_appraisal_period_id`, `p_dashboard_mode`)
+The p_dashboard_mode parameter is a flag to use the appropriate target view. To use the vw_final_cycle_appraisal view, the user passes 'SUMMARY' value into the 'p_dashboard_mode' parameter. 
+
+1.  GetSecuredCorporateDashboard (Manager Mode) with p_dashboard_mode 'SUMMARY' flag: The procedure allows 'MANAGER' role to query the vw_final_cycle_appraisal view to view a consolidated 'SUMMARY' of employees working on his department for the target appraisal period and allows the manager to rank his department's staff by their efficiency percentages.
+
+Sample GetSecuredCorporateDashboard CALL for 'MANAGER' role (CALL GetSecuredCorporateDashboard('jdoe', 'john2026', 3, 'SUMMARY');):
+
+![Sample GetSecuredCorporateDashboard 'SUMMARY' CALL - MANAGER](assets/Sample_GetSecuredCorporateDashboard_CALL_MANAGER_SUMMARY.png)
+
+2.  GetSecuredCorporateDashboard (HR Mode) with p_dashboard_mode 'SUMMARY' flag: The HR can view a consolidated 'SUMMARY' of employees working in all corporate departments for the target appraisal period.
+
+Sample GetSecuredCorporateDashboard CALL for 'HR' role (CALL GetSecuredCorporateDashboard('sjenkins', 'pass123', 3, 'SUMMARY');):
+![Sample GetSecuredCorporateDashboard 'SUMMARY' CALL - HR](assets/Sample_GetSecuredCorporateDashboard_CALL_HR_SUMMARY.png)
 
 ## Limitations
 Refer to the "Out of Scope" sections of this document.
