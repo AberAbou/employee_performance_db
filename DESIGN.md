@@ -203,7 +203,7 @@ Sample GetSecuredCorporateDashboard CALL for 'HR' role (CALL GetSecuredCorporate
 
 #### Underlying Supporting Indexes
 CREATE INDEX `idx_assignment_lookup` ON `project_assignments` (`project_id`, `employee_id`);
-This is Non-Clustered / Non-Unique Index execution of the database engine is Conditional Index Seek (by Project) OR Full Index Scan (by Employee). This index creates a secondary B-Tree structured specifically from left to right. Because project_id is the leftmost column, any query searching or joining from the project's perspective ("Which employees are on Project X?") triggers a high-speed Index Seek straight to the target leaf node. However, because this is a composite index, it follows the Leftmost Prefix Rule. If your query attempts to search or filter using only the second column (employee_id), the structural sorting breaks down. The database engine cannot perform a seek; instead, it is forced to do a Full Index Scan, reading through the entire secondary index tree from left to right to piece the relationship map together.
+This is Non-Clustered / Non-Unique Index. The execution of the database engine is Conditional Index Seek (by Project) OR Full Index Scan (by Employee). This index creates a secondary B-Tree structured specifically from left to right. Because project_id is the leftmost column, any query searching or joining from the project's perspective ("Which employees are on Project X?") triggers a high-speed Index Seek straight to the target leaf node. However, because this is a composite index, it follows the Leftmost Prefix Rule. If your query attempts to search or filter using only the second column (employee_id), the structural sorting breaks down. The database engine cannot perform a seek; instead, it is forced to do a Full Index Scan, reading through the entire secondary index tree from left to right to piece the relationship map together.
 
 ### View 3: vw_final_cycle_appraisal
 This view handles top-line executive rollups. It takes the individual, itemized scores from your first view, sums up both the earned and total possible scores, and calculates an absolute productivity efficiency score (execution_efficiency_pct) alongside a count of active simultaneous projects for each employee.
@@ -224,6 +224,11 @@ Sample GetSecuredCorporateDashboard CALL for 'MANAGER' role (CALL GetSecuredCorp
 
 Sample GetSecuredCorporateDashboard CALL for 'HR' role (CALL GetSecuredCorporateDashboard('sjenkins', 'pass123', 3, 'SUMMARY');):
 ![Sample GetSecuredCorporateDashboard 'SUMMARY' CALL - HR](assets/Sample_GetSecuredCorporateDashboard_CALL_HR_SUMMARY.png)
+
+
+#### Underlying Supporting Indexes
+CREATE INDEX `idx_contrib_scores_lookup` ON `contributions` (`appraisal_period_id`, `employee_id`, `contribution_score`);
+This is Non-Clustered / Non-Unique Index. the database performs Index Seek followed by a Targeted Index Range Scan reading only the sequential leaf nodes belonging to that specific group. Because the math column contribution_score lives inside this secondary index tree, the database engine calculates the math entirely within memory, bypassing raw data blocks and completely preventing a slow, disk-heavy Table Scan.
 
 ## Limitations
 Refer to the "Out of Scope" sections of this document.
