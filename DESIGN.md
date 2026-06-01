@@ -177,4 +177,4 @@ Index B: idx_perf_transaction_lookup: CREATE INDEX `idx_perf_transaction_lookup`
 That is a Non-Clustered / Non-Unique Index utilizing index seek followed by a key lookup for non presented additional query data. This composite index creates a separate secondary B-Tree organized left-to-right starting with appraisal_period_id. When filtering by a target time range (like period 3), the database runs the Index Seek to reach that quarter's data blocks, completely bypassing old history data. However, because this view displays query data which do not live inside this secondary index. The query execution plan performs a Key Lookup to extract the remaining query data.
 
 ## Limitations
-Refer to the Out of Scope sections of this document.
+Refer to the "Out of Scope" sections of this document.
