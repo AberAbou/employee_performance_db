@@ -2,16 +2,21 @@
 
 By Aber Abou-Rahma
 
-Video overview: <URL HERE>
+Video overview: 
+https://www.youtube.com/watch?v=AeGsSS12_Vc
 
 ## Scope
 
 Purpose:
-The purpose of this database is to provide objective guidance to employees' periodic performance appraisal process to both management and HR personnel. Traditionally the periodic employee performance evaluation was determined according to the management input and probably employees' peer reviews input from their colleagues and team mates. 
+The purpose of this database is to aid the process of the employee periodic employee performance review. This database helps both management and HR personnel in reviewing the performance of the organization staff and employees. 
+There are many other factors contributing into the performance appraisal for staff. The initial design for this DB is concerned with the employee contribution to their assigned projects. 
 
 ### In Scope
-Implementing this database project accounts for only one important objective criteria which is employees' contribution(s) to the success projects' they were assigned to work on during the target appraisal period.
-As indicated earlier there are several factors contributing to the employees periodic performance appraisal. The initial release of the employee performance appraisal database scope explores only employees contributions to the projects they were working on as one of the most important objective measures for the employees performance as indicator to the employees' commitment and discipline.
+The current design and implementation of the employee_performance DB accounts for the important criteria to measure the staff performance by measuring their contribution, and yield effort in their assigned projects during the target appraisal period.
+The definition of an appraisal period is a measured duration of time, depending on the company, it could be a quarter, semi-annual or annual appraisal period.
+An employee belongs to department and a department can have many employees and one manager to manage the employees department.
+Many employees can be assigned to many projects. A project may span one or more appraisal period(s).
+
 
 ### Out of Scope
 1. Future releases of the employee performance appraisal database shall account for additional important factors contributing to the evaluation of the employees performance such as the reviews notes of their management and selected individual team members to determine in-part the employees effective work relationship or their consistent attendance and compliance with their work schedule, and availability.
@@ -28,7 +33,7 @@ Following are the minimal functionality offered by the employee_performance data
 4. Employees shall be able to insert and update their own self-appraisal notes for an active cycle.
 5. Managers shall be able to view consolidated performance summaries for all employees under their management.
 6. Managers shall be able to analyze team project allocations, checking historical delivery trends (Completed_OnSchedule vs. Completed_Overdue) to balance future assignments.
-7. Managers shall be able to monitor normalized (percentage) velocity / KPI of their direct reports employees' execution_efficiency_pct of their team members to identify high-velocity contributors for future incentives or  mentorship support for staff needing remediation.
+7. Managers shall be able to monitor normalized (percentage) velocity / KPI of their direct reports employees' execution_efficiency_pct of their team members to identify high-velocity contributors for future incentives or mentorship support for staff needing remediation.
 8. HR representative shall be able to analyze team project allocations and related project progress and completion statuses (Completed_OnSchedule vs. Completed_Overdue), for all employees in all departments for clear input to the reward/remediation future plans.
 9. HR representative shall be able to  monitor normalized (percentage) velocity / KPI of the entire employees' execution_efficiency_pct of the entire employees, except for managers for accurate employees' performance appraisal.
 10. Managers shall be able to log and alter official review notes within transactional records during an active appraisal window, otherwise, they shall not be able to insert or alter review notes within 'locked' appraisal period.
