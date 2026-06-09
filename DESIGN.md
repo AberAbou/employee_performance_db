@@ -3,7 +3,8 @@
 By Aber Abou-Rahma
 
 Video overview: 
-https://www.youtube.com/watch?v=AeGsSS12_Vc
+A comprehensive video breakdown explaining these database schemas, secure stored procedures, and the role-based dashboard views can be found on YouTube:
+👉 [Watch the Detailed Walkthrough Here](https://www.youtube.com/watch?v=0i0n66iuUXY)
 
 ## Scope
 
